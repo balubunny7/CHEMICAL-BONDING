@@ -583,6 +583,24 @@ footer {
 </section>
 <script>
 let current = 0;
+  
+<!-- PRESENTATION NAVIGATION BUTTONS -->
+<div class="controls">
+  <button id="prev" onclick="move(-1)">
+    ← Previous
+  </button>
+
+  <span id="counter">1 / 20</span>
+
+  <button id="next" onclick="move(1)">
+    Next →
+  </button>
+
+  <button onclick="fullscreen()" title="Full Screen">
+    ⛶
+  </button>
+</div>
+
 const slides = document.querySelectorAll(".slide");
 const total = slides.length;
 
