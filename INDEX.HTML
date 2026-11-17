@@ -1,0 +1,633 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chemical Bonding | Grade 9</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #071426;
+  color: white;
+  overflow: hidden;
+}
+
+:root {
+  --cyan: #48d9ff;
+  --blue: #267bff;
+  --yellow: #ffdc65;
+  --muted: #b8c9dd;
+}
+
+#progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 5px;
+  width: 5%;
+  background: var(--cyan);
+  transition: width .3s;
+  z-index: 10;
+}
+
+.slide {
+  display: none;
+  height: 100dvh;
+  width: 100%;
+  padding: 55px 8% 95px;
+  overflow-y: auto;
+  background:
+    radial-gradient(circle at 85% 15%, #123b64 0, transparent 35%),
+    linear-gradient(135deg, #071426, #102c4b);
+  animation: appear .45s ease;
+}
+
+.slide.active {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+@keyframes appear {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.eyebrow {
+  color: var(--cyan);
+  letter-spacing: 4px;
+  font-size: 13px;
+  font-weight: bold;
+  margin-bottom: 18px;
+}
+
+h1 {
+  font-size: clamp(38px, 7vw, 76px);
+  color: var(--cyan);
+  line-height: 1.1;
+  margin-bottom: 22px;
+}
+
+h2 {
+  font-size: clamp(30px, 5vw, 52px);
+  margin-bottom: 25px;
+  color: white;
+}
+
+h3 {
+  color: var(--yellow);
+  font-size: 21px;
+  margin-bottom: 12px;
+}
+
+p, li {
+  color: var(--muted);
+  font-size: clamp(16px, 2vw, 21px);
+  line-height: 1.65;
+}
+
+ul {
+  padding-left: 25px;
+}
+
+li { margin-bottom: 8px; }
+
+.highlight {
+  color: var(--yellow);
+  font-weight: bold;
+}
+
+.subtitle {
+  font-size: 24px;
+  color: var(--muted);
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 17px;
+  margin-top: 22px;
+}
+
+.card {
+  padding: 23px;
+  border: 1px solid #2b597c;
+  border-radius: 18px;
+  background: rgba(23, 57, 88, .65);
+}
+
+.card p {
+  font-size: 16px;
+}
+
+.big {
+  font-size: 45px;
+  color: var(--cyan);
+  margin-bottom: 12px;
+}
+
+.diagram {
+  margin: 25px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 22px;
+  flex-wrap: wrap;
+}
+
+.atom {
+  width: 105px;
+  height: 105px;
+  border-radius: 50%;
+  border: 3px solid var(--cyan);
+  background: radial-gradient(circle, #267bff, #102c4b);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  font-weight: bold;
+  box-shadow: 0 0 25px #267bff88;
+  position: relative;
+}
+
+.atom {
+  position: relative;
+  overflow: visible;
+}
+
+.atom::after {
+  content: "e⁻";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  right: auto;
+  font-size: 19px;
+  color: #ffdc65;
+  transform-origin: 0 0;
+  animation: orbit 3s linear infinite;
+  z-index: 5;
+}
+
+@keyframes orbit {
+  from {
+    transform: rotate(0deg) translateX(42px);
+  }
+  to {
+    transform: rotate(360deg) translateX(42px);
+  }
+}
+
+
+.arrow {
+  color: var(--yellow);
+  font-size: 40px;
+}
+
+.formula {
+  font-size: clamp(32px, 6vw, 55px);
+  color: var(--yellow);
+  text-align: center;
+  margin: 20px;
+  font-weight: bold;
+}
+
+.electron {
+  display: inline-flex;
+  background: #ffdc65;
+  color: #071426;
+  border-radius: 50%;
+  width: 23px;
+  height: 23px;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  margin: 4px;
+}
+
+.quiz {
+  margin-top: 18px;
+  padding: 20px;
+  background: #173958;
+  border-radius: 15px;
+}
+
+.quiz button {
+  background: #267bff;
+  color: white;
+  padding: 12px 18px;
+  margin: 8px 5px 0 0;
+  border: 0;
+  border-radius: 9px;
+  cursor: pointer;
+}
+
+#feedback {
+  margin-top: 12px;
+  color: var(--yellow);
+}
+
+.controls {
+  position: fixed;
+  bottom: 20px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  z-index: 5;
+}
+
+.controls button {
+  padding: 12px 22px;
+  background: var(--blue);
+  border: 0;
+  border-radius: 30px;
+  color: white;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.controls button:disabled {
+  opacity: .35;
+}
+
+#counter {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+footer {
+  color: #8199b3;
+  font-size: 12px;
+  margin-top: 25px;
+}
+
+@media(max-width:600px) {
+  .slide { padding: 45px 6% 95px; }
+  .cards { grid-template-columns: 1fr; }
+  .controls { gap: 10px; }
+  .controls button { padding: 11px 16px; }
+}
+</style>
+</head>
+
+<body>
+
+<div id="progress"></div>
+
+<!-- SLIDE 1 -->
+<section class="slide active">
+  <div class="eyebrow">GRADE 9 • CHEMISTRY</div>
+  <h1>CHEMICAL<br>BONDING</h1>
+  <p class="subtitle">Understanding how atoms combine to form molecules and compounds.</p>
+  <div class="diagram">
+    <div class="atom">Na</div>
+    <div class="atom">Cl</div>
+    <div class="atom">O</div>
+  </div>
+  <footer>AN INTERACTIVE CHEMISTRY PRESENTATION</footer>
+</section>
+
+<!-- SLIDE 2 -->
+<section class="slide">
+  <div class="eyebrow">01 • INTRODUCTION</div>
+  <h2>What is Chemical Bonding?</h2>
+  <p>Chemical bonding is the attractive force that holds atoms or ions together in a molecule or compound.</p>
+  <div class="cards">
+    <div class="card"><div class="big">⚛</div><h3>Atoms</h3><p>Atoms are the basic units of elements.</p></div>
+    <div class="card"><div class="big">↔</div><h3>Combination</h3><p>Atoms combine through chemical interactions.</p></div>
+    <div class="card"><div class="big">✦</div><h3>Stability</h3><p>Bond formation often leads to a more stable electronic arrangement.</p></div>
+  </div>
+</section>
+
+<!-- SLIDE 3 -->
+<section class="slide">
+  <div class="eyebrow">02 • ATOMIC STRUCTURE</div>
+  <h2>Structure of an Atom</h2>
+  <div class="diagram">
+    <div class="atom">⚛</div>
+  </div>
+  <div class="cards">
+    <div class="card"><h3>Protons</h3><p>Positively charged particles found in the nucleus.</p></div>
+    <div class="card"><h3>Neutrons</h3><p>Neutral particles found in the nucleus.</p></div>
+    <div class="card"><h3>Electrons</h3><p>Negatively charged particles found around the nucleus.</p></div>
+  </div>
+</section>
+
+<!-- SLIDE 4 -->
+<section class="slide">
+  <div class="eyebrow">03 • ELECTRON ARRANGEMENT</div>
+  <h2>Electronic Configuration</h2>
+  <p>Electronic configuration describes how electrons are distributed among the shells of an atom.</p>
+  <div class="cards">
+    <div class="card"><h3>Hydrogen</h3><div class="formula">1</div><p>One electron.</p></div>
+    <div class="card"><h3>Oxygen</h3><div class="formula">2, 6</div><p>Two in K shell and six in L shell.</p></div>
+    <div class="card"><h3>Sodium</h3><div class="formula">2, 8, 1</div><p>Two in K, eight in L and one in M.</p></div>
+    <div class="card"><h3>Chlorine</h3><div class="formula">2, 8, 7</div><p>Seven valence electrons.</p></div>
+  </div>
+</section>
+
+<!-- SLIDE 5 -->
+<section class="slide">
+  <div class="eyebrow">04 • STABILITY</div>
+  <h2>Duplet and Octet Rules</h2>
+  <div class="cards">
+    <div class="card">
+      <div class="big">2</div>
+      <h3>Duplet Rule</h3>
+      <p>Atoms with only the first shell are especially stable when it contains two electrons, like helium.</p>
+    </div>
+    <div class="card">
+      <div class="big">8</div>
+      <h3>Octet Rule</h3>
+      <p>Many atoms tend to gain, lose or share electrons to achieve eight electrons in their outermost shell.</p>
+    </div>
+  </div>
+  <p style="margin-top:22px">These are useful rules for understanding many common bonds, but there are exceptions.</p>
+</section>
+
+<!-- SLIDE 6 -->
+<section class="slide">
+  <div class="eyebrow">05 • OUTERMOST SHELL</div>
+  <h2>Valence Electrons</h2>
+  <p>Valence electrons are the electrons present in the outermost occupied shell of an atom.</p>
+  <div class="cards">
+    <div class="card"><h3>Sodium (Na)</h3><div class="formula">2, 8, 1</div><p>1 valence electron</p></div>
+    <div class="card"><h3>Oxygen (O)</h3><div class="formula">2, 6</div><p>6 valence electrons</p></div>
+    <div class="card"><h3>Chlorine (Cl)</h3><div class="formula">2, 8, 7</div><p>7 valence electrons</p></div>
+  </div>
+</section>
+
+<!-- SLIDE 7 -->
+<section class="slide">
+  <div class="eyebrow">06 • CLASSIFICATION</div>
+  <h2>Types of Chemical Bonds</h2>
+  <div class="cards">
+    <div class="card"><div class="big">＋ −</div><h3>Ionic Bond</h3><p>Attraction between oppositely charged ions formed after electron transfer.</p></div>
+    <div class="card"><div class="big">••</div><h3>Covalent Bond</h3><p>Atoms share one or more pairs of electrons.</p></div>
+    <div class="card"><div class="big">⚙</div><h3>Metallic Bond</h3><p>Attraction between positive metal ions and delocalised electrons.</p></div>
+  </div>
+</section>
+
+<!-- SLIDE 8 -->
+<section class="slide">
+  <div class="eyebrow">07 • IONIC BONDING</div>
+  <h2>What is an Ionic Bond?</h2>
+  <p>An ionic bond is the electrostatic attraction between positively and negatively charged ions.</p>
+  <div class="diagram">
+    <div class="atom">Na</div>
+    <div class="arrow">→</div>
+    <div class="atom">Cl</div>
+  </div>
+  <div class="cards">
+    <div class="card"><h3>Electron loss</h3><p>An atom loses electron(s) and forms a positive ion (cation).</p></div>
+    <div class="card"><h3>Electron gain</h3><p>An atom gains electron(s) and forms a negative ion (anion).</p></div>
+  </div>
+</section>
+
+<!-- SLIDE 9 -->
+<section class="slide">
+  <div class="eyebrow">08 • EXAMPLE 1</div>
+  <h2>Formation of Sodium Chloride</h2>
+  <div class="formula">Na + Cl → Na⁺ + Cl⁻</div>
+  <div class="cards">
+    <div class="card"><h3>Step 1</h3><p>Sodium has one valence electron.</p></div>
+    <div class="card"><h3>Step 2</h3><p>Chlorine needs one electron to complete its octet.</p></div>
+    <div class="card"><h3>Step 3</h3><p>Sodium transfers one electron to chlorine.</p></div>
+  </div>
+  <p style="margin-top:20px">The oppositely charged ions attract and form sodium chloride (NaCl).</p>
+</section>
+
+<!-- SLIDE 10 -->
+<section class="slide">
+  <div class="eyebrow">09 • EXAMPLE 2</div>
+  <h2>Formation of Magnesium Oxide</h2>
+  <div class="formula">Mg + O → Mg²⁺ + O²⁻</div>
+  <ul>
+    <li>Magnesium has two valence electrons.</li>
+    <li>Oxygen needs two electrons to complete its octet.</li>
+    <li>Magnesium transfers two electrons to oxygen.</li>
+    <li>The resulting ions attract to form magnesium oxide (MgO).</li>
+  </ul>
+</section>
+
+<!-- SLIDE 11 -->
+<section class="slide">
+  <div class="eyebrow">10 • COVALENT BONDING</div>
+  <h2>What is a Covalent Bond?</h2>
+  <p>A covalent bond is formed when two atoms share one or more pairs of electrons.</p>
+  <div class="diagram">
+    <div class="atom">H</div>
+    <div class="electron">e⁻</div>
+    <div class="electron">e⁻</div>
+    <div class="atom">H</div>
+  </div>
+  <p style="text-align:center">The shared electron pair attracts both nuclei and holds the atoms together.</p>
+</section>
+
+<!-- SLIDE 12 -->
+<section class="slide">
+  <div class="eyebrow">11 • SINGLE BOND</div>
+  <h2>Single Covalent Bond</h2>
+  <div class="formula">H — H</div>
+  <p>A single covalent bond involves the sharing of one pair of electrons.</p>
+  <div class="cards">
+    <div class="card"><h3>Hydrogen (H₂)</h3><p>Two hydrogen atoms share one electron pair.</p></div>
+    <div class="card"><h3>Chlorine (Cl₂)</h3><p>Two chlorine atoms share one electron pair.</p></div>
+  </div>
+</section>
+
+<!-- SLIDE 13 -->
+<section class="slide">
+  <div class="eyebrow">12 • DOUBLE BOND</div>
+  <h2>Double Covalent Bond</h2>
+  <div class="formula">O = O</div>
+  <p>A double covalent bond involves the sharing of two pairs of electrons.</p>
+  <div class="diagram">
+    <div class="atom">O</div>
+    <div style="font-size:38px;color:#ffdc65">=</div>
+    <div class="atom">O</div>
+  </div>
+  <p>Example: Oxygen molecule (O₂).</p>
+</section>
+
+<!-- SLIDE 14 -->
+<section class="slide">
+  <div class="eyebrow">13 • TRIPLE BOND</div>
+  <h2>Triple Covalent Bond</h2>
+  <div class="formula">N ≡ N</div>
+  <p>A triple covalent bond involves the sharing of three pairs of electrons.</p>
+  <div class="diagram">
+    <div class="atom">N</div>
+    <div style="font-size:38px;color:#ffdc65">≡</div>
+    <div class="atom">N</div>
+  </div>
+  <p>Example: Nitrogen molecule (N₂).</p>
+</section>
+
+<!-- SLIDE 15 -->
+<section class="slide">
+  <div class="eyebrow">14 • EXAMPLE 3</div>
+  <h2>Formation of Water</h2>
+  <div class="formula">H — O — H</div>
+  <p>Oxygen shares one pair of electrons with each hydrogen atom.</p>
+  <div class="cards">
+    <div class="card"><h3>Oxygen</h3><p>Forms two single covalent bonds.</p></div>
+    <div class="card"><h3>Hydrogen</h3><p>Each hydrogen shares one electron with oxygen.</p></div>
+  </div>
+  <p style="margin-top:20px">Chemical formula: H₂O.</p>
+</section>
+
+<!-- SLIDE 16 -->
+<section class="slide">
+  <div class="eyebrow">15 • EXAMPLE 4</div>
+  <h2>Formation of Carbon Dioxide</h2>
+  <div class="formula">O = C = O</div>
+  <p>Carbon shares two pairs of electrons with each oxygen atom.</p>
+  <div class="cards">
+    <div class="card"><h3>Carbon</h3><p>Has four valence electrons.</p></div>
+    <div class="card"><h3>Oxygen</h3><p>Has six valence electrons.</p></div>
+  </div>
+  <p style="margin-top:20px">Two double covalent bonds are formed. Formula: CO₂.</p>
+</section>
+
+<!-- SLIDE 17 -->
+<section class="slide">
+  <div class="eyebrow">16 • COMPARISON</div>
+  <h2>Ionic vs Covalent Bond</h2>
+  <div class="cards">
+    <div class="card">
+      <h3>Ionic Bond</h3>
+      <p>• Electron transfer</p>
+      <p>• Usually metal + non-metal</p>
+      <p>• Forms ions</p>
+      <p>• Often high melting points</p>
+      <p>• Conducts electricity when molten or dissolved if mobile ions are present</p>
+    </div>
+    <div class="card">
+      <h3>Covalent Bond</h3>
+      <p>• Electron sharing</p>
+      <p>• Usually non-metal + non-metal</p>
+      <p>• Forms molecules or networks</p>
+      <p>• Molecular substances often have lower melting points</p>
+      <p>• Usually poor electrical conductors</p>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 18 -->
+<section class="slide">
+  <div class="eyebrow">17 • DAILY LIFE</div>
+  <h2>Chemical Bonding Around Us</h2>
+  <div class="cards">
+    <div class="card"><div class="big">💧</div><h3>Water</h3><p>H₂O – covalent bonds.</p></div>
+    <div class="card"><div class="big">🧂</div><h3>Common Salt</h3><p>NaCl – ionic bonding.</p></div>
+    <div class="card"><div class="big">🌬</div><h3>Oxygen</h3><p>O₂ – double covalent bond.</p></div>
+    <div class="card"><div class="big">☁</div><h3>Carbon Dioxide</h3><p>CO₂ – double covalent bonds.</p></div>
+  </div>
+</section>
+
+<!-- SLIDE 19 -->
+<section class="slide">
+  <div class="eyebrow">18 • TEST YOUR KNOWLEDGE</div>
+  <h2>Quick Chemistry Quiz</h2>
+  <div class="quiz">
+    <h3>1. How many valence electrons does oxygen have?</h3>
+    <button onclick="check(this, false)">A. 2</button>
+    <button onclick="check(this, true)">B. 6</button>
+    <button onclick="check(this, false)">C. 8</button>
+  </div>
+  <div class="quiz">
+    <h3>2. Which bond involves electron sharing?</h3>
+    <button onclick="check(this, false)">A. Ionic</button>
+    <button onclick="check(this, true)">B. Covalent</button>
+  </div>
+  <div class="quiz">
+    <h3>3. What is the formula of common salt?</h3>
+    <button onclick="check(this, true)">A. NaCl</button>
+    <button onclick="check(this, false)">B. H₂O</button>
+  </div>
+  <div id="feedback">Select an answer to check it.</div>
+</section>
+
+<!-- SLIDE 20 -->
+<section class="slide">
+  <div class="eyebrow">GRADE 9 • CHEMISTRY</div>
+
+  <h1>THANK YOU!</h1>
+
+  <div class="diagram">
+    <div class="atom">Na</div>
+    <div class="atom">Cl</div>
+    <div class="atom">O</div>
+  </div>
+
+  <h2>CHEMICAL BONDING</h2>
+
+  <p style="text-align:center;color:#48d9ff;">
+    Created by Balaji
+  </p>
+
+  <p style="text-align:center;color:#ffdc65;">
+    Presented by P.Pavan 
+  </p>
+</section>
+<script>
+let current = 0;
+const slides = document.querySelectorAll(".slide");
+const total = slides.length;
+
+function showSlide() {
+  slides.forEach((slide, index) => {
+    slide.classList.toggle("active", index === current);
+  });
+
+  document.getElementById("counter").textContent =
+    `${current + 1} / ${total}`;
+
+  document.getElementById("progress").style.width =
+    `${((current + 1) / total) * 100}%`;
+
+  document.getElementById("prev").disabled = current === 0;
+  document.getElementById("next").disabled = current === total - 1;
+}
+
+function move(direction) {
+  current = Math.max(0, Math.min(total - 1, current + direction));
+  showSlide();
+}
+
+document.addEventListener("keydown", event => {
+  if (event.key === "ArrowRight" || event.key === " ") move(1);
+  if (event.key === "ArrowLeft") move(-1);
+});
+
+function fullscreen() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen?.();
+  } else {
+    document.exitFullscreen?.();
+  }
+}
+
+function check(button, correct) {
+  const feedback = document.getElementById("feedback");
+  feedback.textContent = correct
+    ? "Correct! Excellent work."
+    : "Not quite. Try again!";
+}
+
+showSlide();
+</script>
+
+</body>
+</html>
