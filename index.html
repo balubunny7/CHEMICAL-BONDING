@@ -186,6 +186,11 @@ li { margin-bottom: 8px; }
 }
 
 
+@keyframes orbit {
+  from { transform: rotate(0deg) translateX(15px) rotate(0deg); }
+  to { transform: rotate(360deg) translateX(15px) rotate(-360deg); }
+}
+
 .arrow {
   color: var(--yellow);
   font-size: 40px;
@@ -581,9 +586,7 @@ footer {
     Presented by P.Pavan 
   </p>
 </section>
-<script>
-let current = 0;
-  
+
 <!-- PRESENTATION NAVIGATION BUTTONS -->
 <div class="controls">
   <button id="prev" onclick="move(-1)">
@@ -601,6 +604,9 @@ let current = 0;
   </button>
 </div>
 
+
+<script>
+let current = 0;
 const slides = document.querySelectorAll(".slide");
 const total = slides.length;
 
